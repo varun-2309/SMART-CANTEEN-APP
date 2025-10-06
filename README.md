@@ -15,7 +15,5 @@ This is the Smart Canteen project: students can order food, staff can manage ord
 
 ## Team
 - Varun Reniwal
-- [Names of your teammates]
-
-## Status
-Initial planning completed; backend stub and folder structure created.
+- Nakshatra Deora
+- Aadi Pareek
