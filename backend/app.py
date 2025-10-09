@@ -11,7 +11,7 @@ def load_veg():
     if not CSV_FILE.exists():
         return items
     with CSV_FILE.open(encoding="utf-8") as f:
-        reader = csv.DictReader(f)  # expects a header row
+        reader = csv.DictReader(f) 
         for i, row in enumerate(reader, start=1):
             name = row.get("name") or row.get("Name") or row.get("item") or row.get("Item") or f"Item {i}"
             price_raw = row.get("price") or row.get("Price") or row.get("cost") or row.get("Cost") or "0"
