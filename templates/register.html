@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 50px auto;">
+    <h1 style="color: #667eea; margin-bottom: 20px; text-align: center;">Register 📝</h1>
+    <form id="registerForm" style="display: flex; flex-direction: column; gap: 15px;">
+        <input type="text" id="username" placeholder="Username" required style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px;">
+        <input type="email" id="email" placeholder="Email" required style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px;">
+        <input type="password" id="password" placeholder="Password" required style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px;">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px;">
+        <button type="submit" class="btn">Register</button>
+        <p style="text-align: center; color: #718096;">Already have an account? <a href="/login" style="color: #667eea;">Login here</a></p>
+    </form>
+</div>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, email, password})
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                showNotification('Registration successful!');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 1500);
+            } else {
+                alert(data.error || 'Registration failed');
+            }
+        } catch (error) {
+            alert('Registration error. Please try again.');
+        }
+    });
+</script>
+{% endblock %}

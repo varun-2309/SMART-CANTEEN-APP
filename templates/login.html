@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 50px auto;">
+    <h1 style="color: #667eea; margin-bottom: 20px; text-align: center;">Login 🔐</h1>
+    <form id="loginForm" style="display: flex; flex-direction: column; gap: 15px;">
+        <input type="text" id="username" placeholder="Username" required style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px;">
+        <input type="password" id="password" placeholder="Password" required style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 5px; font-size: 14px;">
+        <button type="submit" class="btn">Login</button>
+        <p style="text-align: center; color: #718096;">Don't have an account? <a href="/register" style="color: #667eea;">Register here</a></p>
+    </form>
+</div>
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({username, password})
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                showNotification('Login successful!');
+                setTimeout(() => {
+                    if (data.is_staff) {
+                        window.location.href = '/staff/dashboard';
+                    } else {
+                        window.location.href = '/menu';
+                    }
+                }, 1000);
+            } else {
+                alert(data.error || 'Login failed');
+            }
+        } catch (error) {
+            alert('Login error. Please try again.');
+        }
+    });
+</script>
+{% endblock %}

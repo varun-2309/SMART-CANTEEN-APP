@@ -796,5 +796,11 @@ def create_templates():
     print("✅ All templates created successfully!")
 
 # Main execution
+# Main execution
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    # Create templates and initialize database
+    create_templates()
+    init_database()
+    
+    # Run the Flask app
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
