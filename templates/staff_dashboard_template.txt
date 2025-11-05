@@ -1,0 +1,75 @@
+"""{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1 style="color: #667eea; margin-bottom: 20px;">Staff Dashboard 👨‍🍳</h1>
+    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button class="category-btn active" onclick="filterOrders('all')">All Orders</button>
+        <button class="category-btn" onclick="filterOrders('pending')">Pending</button>
+        <button class="category-btn" onclick="filterOrders('preparing')">Preparing</button>
+        <button class="category-btn" onclick="filterOrders('ready')">Ready</button>
+    </div>
+    <div id="orders-container">
+        {% for order in orders %}
+        <div class="card" style="margin-bottom: 15px; background: #f8f9fa;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h3>Order #{{ order.id }}</h3>
+                    <p style="color: #666; margin: 5px 0;">Customer: {{ order.customer.username }}</p>
+                    <p style="color: #666; margin: 5px 0;">Time: {{ order.order_date.strftime('%H:%M') }}</p>
+                    <div style="margin: 10px 0;">
+                        {% for item in order.items %}
+                        <div>• {{ item.menu_item.name }} x{{ item.quantity }}</div>
+                        {% endfor %}
+                    </div>
+                    {% if order.special_instructions %}
+                    <p style="color: #e53e3e; font-style: italic;">Note: {{ order.special_instructions }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="status-badge status-{{ order.status }}">{{ order.status.upper() }}</span>
+                    <div style="margin-top: 10px;">
+                        <select onchange="updateStatus({{ order.id }}, this.value)" style="padding: 5px; border-radius: 5px; border: 1px solid #cbd5e0;">
+                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="preparing" {% if order.status == 'preparing' %}selected{% endif %}>Preparing</option>
+                            <option value="ready" {% if order.status == 'ready' %}selected{% endif %}>Ready</option>
+                            <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    function updateStatus(orderId, status) {
+        fetch(`/api/staff/update_order/${orderId}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({status: status})
+        })
+        .then(response => response.json())
+        .then(data => {
+            showNotification('Order status updated!');
+            setTimeout(() => location.reload(), 1000);
+        })
+        .catch(error => {
+            alert('Error updating status');
+        });
+    }
+    
+    function filterOrders(status) {
+        fetch(`/api/staff/orders?status=${status}`)
+            .then(response => response.json())
+            .then(orders => {
+                location.reload();
+            });
+    }
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        location.reload();
+    }, 30000);
+</script>
+{% endblock %}"""

@@ -1,0 +1,12 @@
+
+    index_template = """{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1 style="color: #667eea; margin-bottom: 20px;">Welcome to Smart Canteen! 🍴</h1>
+    <p style="font-size: 18px; color: #4a5568; line-height: 1.6;">Order delicious food quickly and easily. Track your orders in real-time!</p>
+    <div style="margin-top: 30px; display: flex; gap: 20px;">
+        <a href="/menu" class="btn" style="text-decoration: none;">Browse Menu</a>
+        <a href="/login" class="btn" style="text-decoration: none; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">Login / Register</a>
+    </div>
+</div>
+{% endblock %}"""

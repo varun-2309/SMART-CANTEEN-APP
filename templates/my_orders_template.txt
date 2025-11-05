@@ -1,0 +1,58 @@
+"""{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h1 style="color: #667eea; margin-bottom: 20px;">My Orders 📦</h1>
+    {% if orders %}
+        {% for order in orders %}
+        <div class="card" style="margin-bottom: 15px; background: #f8f9fa;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="flex: 1;">
+                    <h3>Order #{{ order.id }}</h3>
+                    <p style="color: #666; margin: 5px 0;">Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                    <p style="color: #666; margin: 5px 0;">Total: ${{ "%.2f"|format(order.total_amount) }}</p>
+                    {% if order.estimated_time %}
+                    <p style="color: #666; margin: 5px 0;">Estimated Ready Time: {{ order.estimated_time.strftime('%H:%M') }}</p>
+                    {% endif %}
+                    <div style="margin: 10px 0;">
+                        <strong>Items:</strong>
+                        {% for item in order.items %}
+                        <div>• {{ item.menu_item.name }} x{{ item.quantity }} - ${{ "%.2f"|format(item.price * item.quantity) }}</div>
+                        {% endfor %}
+                    </div>
+                    {% if order.special_instructions %}
+                    <p style="color: #e53e3e; font-style: italic; margin-top: 10px;">Note: {{ order.special_instructions }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="status-badge status-{{ order.status }}">{{ order.status.upper() }}</span>
+                    <button onclick="refreshOrderStatus({{ order.id }})" class="btn" style="margin-top: 10px; padding: 8px 16px; font-size: 14px;">Refresh Status</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; padding: 40px; color: #718096;">
+            <p style="font-size: 18px; margin-bottom: 20px;">You haven't placed any orders yet!</p>
+            <a href="/menu" class="btn" style="text-decoration: none;">Browse Menu</a>
+        </div>
+    {% endif %}
+</div>
+<script>
+    function refreshOrderStatus(orderId) {
+        fetch(`/api/order/${orderId}`)
+            .then(response => response.json())
+            .then(data => {
+                showNotification('Order status: ' + data.status.toUpperCase());
+                setTimeout(() => location.reload(), 1000);
+            })
+            .catch(error => {
+                alert('Error fetching order status');
+            });
+    }
+    
+    // Auto-refresh every 30 seconds
+    setInterval(() => {
+        location.reload();
+    }, 30000);
+</script>
+{% endblock %}"""
