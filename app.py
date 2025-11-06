@@ -12,19 +12,16 @@ from datetime import datetime
 import secrets
 import os
 
-# Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_hex(16)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///canteen.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize extensions
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-# Database Models
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -65,7 +62,6 @@ class OrderItem(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -151,10 +147,10 @@ def place_order():
     order = Order(
         user_id=current_user.id,
         special_instructions=special_instructions,
-        total_amount=0  # Will update after calculating
+        total_amount=0  
     )
     db.session.add(order)
-    db.session.flush()  # Get order ID without committing
+    db.session.flush()  
     
     for item in items:
         menu_item = MenuItem.query.get(item['id'])
@@ -289,13 +285,13 @@ def update_menu_item(item_id):
     
     return jsonify({'message': 'Menu item updated successfully'})
 
-# Initialize database and create sample data
+
 def init_database():
     """Initialize database with tables and sample data"""
     with app.app_context():
         db.create_all()
         
-        # Create sample staff user if doesn't exist
+     
         if not User.query.filter_by(username='staff').first():
             staff_user = User(
                 username='staff',
@@ -305,7 +301,7 @@ def init_database():
             )
             db.session.add(staff_user)
         
-        # Create sample menu items if empty
+ 
         if MenuItem.query.count() == 0:
             sample_items = [
                 MenuItem(name='Veg Burger', category='Burgers', price=5.99, description='Fresh veggie patty with lettuce and tomato', preparation_time=10),
@@ -329,13 +325,13 @@ def init_database():
         db.session.commit()
         print("✅ Database initialized successfully!")
 
-# Replace the entire create_templates() function in your app.py with this:
+
 
 def create_templates():
     """Create all HTML template files"""
     os.makedirs('templates', exist_ok=True)
     
-    # Base template
+
     base_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -418,7 +414,6 @@ def create_templates():
 </body>
 </html>"""
     
-    # Index template
     index_template = """{% extends "base.html" %}
 {% block content %}
 <div class="card">
@@ -431,7 +426,7 @@ def create_templates():
 </div>
 {% endblock %}"""
     
-    # Menu template
+
     menu_template = """{% extends "base.html" %}
 {% block content %}
 <div class="card">
@@ -537,7 +532,6 @@ def create_templates():
 </script>
 {% endblock %}"""
     
-    # Login template
     login_template = """{% extends "base.html" %}
 {% block content %}
 <div class="card" style="max-width: 400px; margin: 50px auto;">
@@ -583,7 +577,7 @@ def create_templates():
 </script>
 {% endblock %}"""
     
-    # Register template
+ 
     register_template = """{% extends "base.html" %}
 {% block content %}
 <div class="card" style="max-width: 400px; margin: 50px auto;">
@@ -634,7 +628,7 @@ def create_templates():
 </script>
 {% endblock %}"""
     
-    # My Orders template
+    
     my_orders_template = """{% extends "base.html" %}
 {% block content %}
 <div class="card">
@@ -694,7 +688,7 @@ def create_templates():
 </script>
 {% endblock %}"""
     
-    # Staff Dashboard template
+
     staff_dashboard_template = """{% extends "base.html" %}
 {% block content %}
 <div class="card">
@@ -771,7 +765,6 @@ def create_templates():
 </script>
 {% endblock %}"""
     
-    # Write all template files with UTF-8 encoding
     with open('templates/base.html', 'w', encoding='utf-8') as f:
         f.write(base_template)
     
@@ -795,7 +788,6 @@ def create_templates():
     
     print("✅ All templates created successfully!")
 
-# Main execution
 create_templates()
 init_database()
 if __name__ == '__main__':
