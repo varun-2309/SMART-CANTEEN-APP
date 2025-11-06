@@ -54,11 +54,11 @@
         cart.forEach(item => {
             const subtotal = item.price * item.quantity;
             total += subtotal;
-            cartHtml += `<div style="margin: 10px 0; padding: 10px; background: #f7fafc; border-radius: 5px;">
-                <strong>${item.name}</strong> x ${item.quantity} = $${subtotal.toFixed(2)}
-            </div>`;
+            cartHtml += '<div style="margin: 10px 0; padding: 10px; background: #f7fafc; border-radius: 5px;">';
+            cartHtml += '<strong>' + item.name + '</strong> x ' + item.quantity + ' = ₹' + subtotal.toFixed(2);
+            cartHtml += '</div>';
         });
-        cartHtml += `<h3 style="margin-top: 20px;">Total: $${total.toFixed(2)}</h3>`;
+        cartHtml += '<h3 style="margin-top: 20px;">Total: ₹' + total.toFixed(2) + '</h3>';
         cartHtml += '<button onclick="checkout()" class="btn" style="margin-top: 20px;">Checkout</button>';
         
         const modal = document.createElement('div');

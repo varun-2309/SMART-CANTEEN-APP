@@ -9,14 +9,14 @@
                 <div style="flex: 1;">
                     <h3>Order #{{ order.id }}</h3>
                     <p style="color: #666; margin: 5px 0;">Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</p>
-                    <p style="color: #666; margin: 5px 0;">Total: ${{ "%.2f"|format(order.total_amount) }}</p>
+                    <p style="color: #666; margin: 5px 0;">Total: ₹{{ "%.2f"|format(order.total_amount) }}</p>
                     {% if order.estimated_time %}
                     <p style="color: #666; margin: 5px 0;">Estimated Ready Time: {{ order.estimated_time.strftime('%H:%M') }}</p>
                     {% endif %}
                     <div style="margin: 10px 0;">
                         <strong>Items:</strong>
                         {% for item in order.items %}
-                        <div>• {{ item.menu_item.name }} x{{ item.quantity }} - ${{ "%.2f"|format(item.price * item.quantity) }}</div>
+                        <div>• {{ item.menu_item.name }} x{{ item.quantity }} - ₹{{ "%.2f"|format(item.price * item.quantity) }}</div>
                         {% endfor %}
                     </div>
                     {% if order.special_instructions %}

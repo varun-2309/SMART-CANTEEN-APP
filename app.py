@@ -488,11 +488,11 @@ def create_templates():
         cart.forEach(item => {
             const subtotal = item.price * item.quantity;
             total += subtotal;
-            cartHtml += `<div style="margin: 10px 0; padding: 10px; background: #f7fafc; border-radius: 5px;">
-                <strong>${item.name}</strong> x ${item.quantity} = $${subtotal.toFixed(2)}
-            </div>`;
+            cartHtml += '<div style="margin: 10px 0; padding: 10px; background: #f7fafc; border-radius: 5px;">';
+            cartHtml += '<strong>' + item.name + '</strong> x ' + item.quantity + ' = ₹' + subtotal.toFixed(2);
+            cartHtml += '</div>';
         });
-        cartHtml += `<h3 style="margin-top: 20px;">Total: $${total.toFixed(2)}</h3>`;
+        cartHtml += '<h3 style="margin-top: 20px;">Total: ₹' + total.toFixed(2) + '</h3>';
         cartHtml += '<button onclick="checkout()" class="btn" style="margin-top: 20px;">Checkout</button>';
         
         const modal = document.createElement('div');
@@ -646,14 +646,14 @@ def create_templates():
                 <div style="flex: 1;">
                     <h3>Order #{{ order.id }}</h3>
                     <p style="color: #666; margin: 5px 0;">Date: {{ order.order_date.strftime('%Y-%m-%d %H:%M') }}</p>
-                    <p style="color: #666; margin: 5px 0;">Total: ${{ "%.2f"|format(order.total_amount) }}</p>
+                    <p style="color: #666; margin: 5px 0;">Total: ₹{{ "%.2f"|format(order.total_amount) }}</p>
                     {% if order.estimated_time %}
                     <p style="color: #666; margin: 5px 0;">Estimated Ready Time: {{ order.estimated_time.strftime('%H:%M') }}</p>
                     {% endif %}
                     <div style="margin: 10px 0;">
                         <strong>Items:</strong>
                         {% for item in order.items %}
-                        <div>• {{ item.menu_item.name }} x{{ item.quantity }} - ${{ "%.2f"|format(item.price * item.quantity) }}</div>
+                        <div>• {{ item.menu_item.name }} x{{ item.quantity }} - ₹{{ "%.2f"|format(item.price * item.quantity) }}</div>
                         {% endfor %}
                     </div>
                     {% if order.special_instructions %}
@@ -796,11 +796,7 @@ def create_templates():
     print("✅ All templates created successfully!")
 
 # Main execution
-# Main execution
+create_templates()
+init_database()
 if __name__ == '__main__':
-    # Create templates and initialize database
-    create_templates()
-    init_database()
-    
-    # Run the Flask app
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
